@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Florence Reader MVP
 
-## Getting Started
+A reader-first Next.js App Router prototype for an ebook website.
 
-First, run the development server:
+## What this MVP includes
+
+- landing page with upload CTA
+- library page with recent books
+- single-pane demo reader
+- real PDF.js / EPUB.js rendering for uploaded local books
+- local IndexedDB storage for uploads and progress
+- background reading event API route
+- subtle memory + image pipeline status UI
+- first-pass on-disk memory and image agents using @hyper-labs/hyper-router + OpenRouter
+
+## Routes
+
+- `/` — landing page
+- `/library` — recent books
+- `/reader/demo` — demo reader
+- `/reader/[bookId]` — reader for seeded and uploaded books
+- `/api/reading-events` — memory/background event endpoint
+- `/api/image-events` — image prompt/background event endpoint
+
+## Memory agent test setup
+
+This branch includes a first-pass memory creation agent implemented through `@hyper-labs/hyper-router`:
+
+- runtime SDK: `@hyper-labs/hyper-router`
+- provider: `OpenRouterProvider`
+- model: `moonshotai/kimi-k2.5`
+- agent input: memory so far + current page text
+- tool: `create_memory`
+- tool behavior: append-only writes to markdown files on disk
+- skip rule: if the page has no extracted text, the memory agent is not called
+- session mode: stable per-book hyper-router session id
+- dedupe: same book + reading unit + identical extracted text will not append twice
+
+Memory markdown files are written under:
+
+- `memory-artifacts/<book-id>.md`
+
+hyper-router transcript storage is written under:
+
+- `memory-artifacts/hyper-router-memory-sessions.json`
+
+memory dedupe cache is written under:
+
+- `memory-artifacts/memory-dedupe.json`
+
+## Image agent test setup
+
+This branch also includes a first-pass image prompt agent implemented through `@hyper-labs/hyper-router`:
+
+- runtime SDK: `@hyper-labs/hyper-router`
+- provider: `OpenRouterProvider`
+- model: `google/gemini-2.5-flash-image`
+- agent input: memory so far + previous/current/next page text
+- tool: `create_image`
+- tool behavior: append a polished image prompt to markdown on disk
+- skip rule: if the page has no extracted text, the image agent is not called
+- session mode: stable per-book hyper-router session id
+- dedupe: same book + reading unit + identical extracted text will not write twice
+
+Image prompt files are written under:
+
+- `memory-artifacts/images/<book-id>-<reading-unit>.md`
+
+image hyper-router transcript storage is written under:
+
+- `memory-artifacts/hyper-router-image-sessions.json`
+
+image dedupe cache is written under:
+
+- `memory-artifacts/image-dedupe.json`
+
+Set your API key before running:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then add:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+OPENROUTER_API_KEY=your_key_here
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run
 
-## Learn More
+```bash
+pnpm --dir d:/Florence/florence-reader dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Debugging in the reader UI
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The reader side panel currently shows a small memory debug block with:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- session id
+- runtime status
+- transcript file path
+- dedupe hit/fresh run
+- last tool output
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This version is still intentionally reader-first:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- AI runs quietly in the background
+- the memory agent is narrow and append-only
+- the image agent currently writes high-quality prompts to disk for inspection
+- memory and image artifacts are currently stored on disk for inspection
+- both agents now use `@hyper-labs/hyper-router` instead of direct manual OpenRouter fetches
+
+## Next build steps
+
+1. Verify memory and image prompt quality across real PDFs and EPUBs.
+2. Improve exact last-opened page/location restore.
+3. Replace prompt-only image output with real image generation/storage.
+4. Decide whether to persist artifacts in IndexedDB, server DB, or sync storage later.

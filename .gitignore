@@ -23,6 +23,9 @@
 # misc
 .DS_Store
 *.pem
+/memory-artifacts/
+/public/reading-units/**/memory-agent-responses.json
+/public/waterbabiesfairy00king_1.pdf
 
 # debug
 npm-debug.log*
