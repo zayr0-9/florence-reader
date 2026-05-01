@@ -1,0 +1,11 @@
+{
+  "name": "florence-reader-sandbox-runtime",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@hyper-labs/hyper-router": "^0.1.4",
+    "@openrouter/agent": "^0.3.2",
+    "tsx": "^4.21.0",
+    "zod": "^4.1.12"
+  }
+}

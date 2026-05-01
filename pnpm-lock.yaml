@@ -13,22 +13,28 @@ importers:
         version: 1.3.1(dc7352af320ee2132983d3dfbee89de0)
       '@hyper-labs/hyper-router':
         specifier: ^0.1.4
-        version: 0.1.4(@ai-sdk/amazon-bedrock@4.0.96(zod@4.1.12))(@ai-sdk/openai@3.0.53(zod@4.1.12))(@openrouter/agent@0.4.0)(ai@6.0.168(zod@4.1.12))(pg@8.20.0)(sql.js@1.14.1)(zod@4.1.12)
+        version: 0.1.4(@ai-sdk/amazon-bedrock@4.0.96(zod@4.1.12))(@ai-sdk/openai@3.0.53(zod@4.1.12))(@openrouter/agent@0.3.2)(ai@6.0.168(zod@4.1.12))(pg@8.20.0)(sql.js@1.14.1)(zod@4.1.12)
       '@likecoin/epub-ts':
         specifier: ^0.6.3
         version: 0.6.3
       '@openrouter/agent':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.3.2
+        version: 0.3.2
       '@tabler/icons-react':
         specifier: ^3.41.1
         version: 3.41.1(react@19.2.4)
+      '@vercel/sandbox':
+        specifier: ^1.10.0
+        version: 1.10.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.6.1
       next:
         specifier: 16.2.4
         version: 16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -1031,8 +1037,8 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==, tarball: https://registry.npmjs.org/@open-draft/until/-/until-2.1.0.tgz}
 
-  '@openrouter/agent@0.4.0':
-    resolution: {integrity: sha512-at/vbDFdWm2+iUYEw63gVMc1dt3zMW+WWOUofrMmouxi6GdY05pR3gyUGLAIgQYjeAnfK2gWIop/idt/tBCw4A==, tarball: https://registry.npmjs.org/@openrouter/agent/-/agent-0.4.0.tgz}
+  '@openrouter/agent@0.3.2':
+    resolution: {integrity: sha512-ovC9OJLWHdhCozg12Y/PC7+mUuQP+uwC1pxpY+nUzor428sNOixxmHZtcZAv8WIjwJdda5o+4OKe0yqiQRfkcA==, tarball: https://registry.npmjs.org/@openrouter/agent/-/agent-0.3.2.tgz}
 
   '@openrouter/sdk@0.12.16':
     resolution: {integrity: sha512-O4DJU49NGl12nITT6bvVaIP5vE/2p8PIhQPVNic8iRpbZZHaugChp6R5OBfCxTJEwqLh60ArrdFvlDLcgct/Aw==, tarball: https://registry.npmjs.org/@openrouter/sdk/-/sdk-0.12.16.tgz}
@@ -2118,6 +2124,12 @@ packages:
     resolution: {integrity: sha512-UycprH3T6n3jH0k44NHMa7pnFHGu/N05MjojYr+Mc6I7obkoLIJujSWwin1pCvdy/eOxrI/l3uDLQsmcrOb4ug==, tarball: https://registry.npmjs.org/@vercel/oidc/-/oidc-3.2.0.tgz}
     engines: {node: '>= 20'}
 
+  '@vercel/sandbox@1.10.0':
+    resolution: {integrity: sha512-rGA8KJB5ZwQeygzsndgrbHsys3HGWKHQaRQlmyIEHce2BFuTfQUgivHDj5DCZhWiyjjSEodLHpoJkZBd95K0/Q==, tarball: https://registry.npmjs.org/@vercel/sandbox/-/sandbox-1.10.0.tgz}
+
+  '@workflow/serde@4.1.0-beta.2':
+    resolution: {integrity: sha512-8kkeoQKLDaKXefjV5dbhBj2aErfKp1Mc4pb6tj8144cF+Em5SPbyMbyLCHp+BVrFfFVCBluCtMx+jjvaFVZGww==, tarball: https://registry.npmjs.org/@workflow/serde/-/serde-4.1.0-beta.2.tgz}
+
   accepts@2.0.0:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==, tarball: https://registry.npmjs.org/accepts/-/accepts-2.0.0.tgz}
     engines: {node: '>= 0.6'}
@@ -2222,6 +2234,9 @@ packages:
     resolution: {integrity: sha512-hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==, tarball: https://registry.npmjs.org/async-function/-/async-function-1.0.0.tgz}
     engines: {node: '>= 0.4'}
 
+  async-retry@1.3.3:
+    resolution: {integrity: sha512-wfr/jstw9xNi/0teMHrRW7dsz3Lt5ARhYNZ2ewpadnhaIp5mbALhOAP+EAdsC7t4Z6wqsDVv9+W6gm1Dk9mEyw==, tarball: https://registry.npmjs.org/async-retry/-/async-retry-1.3.3.tgz}
+
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==, tarball: https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.7.tgz}
     engines: {node: '>= 0.4'}
@@ -2237,12 +2252,28 @@ packages:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==, tarball: https://registry.npmjs.org/axobject-query/-/axobject-query-4.1.0.tgz}
     engines: {node: '>= 0.4'}
 
+  b4a@1.8.0:
+    resolution: {integrity: sha512-qRuSmNSkGQaHwNbM7J78Wwy+ghLEYF1zNrSeMxj4Kgw6y33O3mXcQ6Ie9fRvfU/YnxWkOchPXbaLb73TkIsfdg==, tarball: https://registry.npmjs.org/b4a/-/b4a-1.8.0.tgz}
+    peerDependencies:
+      react-native-b4a: '*'
+    peerDependenciesMeta:
+      react-native-b4a:
+        optional: true
+
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==, tarball: https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz}
 
   balanced-match@4.0.4:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==, tarball: https://registry.npmjs.org/balanced-match/-/balanced-match-4.0.4.tgz}
     engines: {node: 18 || 20 || >=22}
+
+  bare-events@2.8.2:
+    resolution: {integrity: sha512-riJjyv1/mHLIPX4RwiK+oW9/4c3TEUeORHKefKAKnZ5kyslbN+HXowtbaVEqt4IMUB7OXlfixcs6gsFeo/jhiQ==, tarball: https://registry.npmjs.org/bare-events/-/bare-events-2.8.2.tgz}
+    peerDependencies:
+      bare-abort-controller: '*'
+    peerDependenciesMeta:
+      bare-abort-controller:
+        optional: true
 
   baseline-browser-mapping@2.10.19:
     resolution: {integrity: sha512-qCkNLi2sfBOn8XhZQ0FXsT1Ki/Yo5P90hrkRamVFRS7/KV9hpfA4HkoWNU152+8w0zPjnxo5psx5NL3PSGgv5g==, tarball: https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.10.19.tgz}
@@ -2511,6 +2542,10 @@ packages:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==, tarball: https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz}
     engines: {node: '>=0.10.0'}
 
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==, tarball: https://registry.npmjs.org/dotenv/-/dotenv-16.6.1.tgz}
+    engines: {node: '>=12'}
+
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==, tarball: https://registry.npmjs.org/dotenv/-/dotenv-17.4.2.tgz}
     engines: {node: '>=12'}
@@ -2730,6 +2765,9 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==, tarball: https://registry.npmjs.org/etag/-/etag-1.8.1.tgz}
     engines: {node: '>= 0.6'}
 
+  events-universal@1.0.1:
+    resolution: {integrity: sha512-LUd5euvbMLpwOF8m6ivPCbhQeSiYVNb8Vs0fQ8QjXo0JTkEHpz8pxdQf0gStltaPpw0Cca8b39KxvK9cfKRiAw==, tarball: https://registry.npmjs.org/events-universal/-/events-universal-1.0.1.tgz}
+
   eventsource-parser@3.0.6:
     resolution: {integrity: sha512-Vo1ab+QXPzZ4tCa8SwIHJFaSzy4R6SHf7BY79rFBDf0idraZWAkYrDjDj8uWaSm3S2TK+hJ7/t1CEmZ7jXw+pg==, tarball: https://registry.npmjs.org/eventsource-parser/-/eventsource-parser-3.0.6.tgz}
     engines: {node: '>=18.0.0'}
@@ -2758,6 +2796,9 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==, tarball: https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz}
+
+  fast-fifo@1.3.2:
+    resolution: {integrity: sha512-/d9sfos4yxzpwkDkuN7k2SqFKtYNmCTzgfEpz82x34IM9/zc8KGxQoXg1liNC/izpRM/MBdt44Nmx41ZWqk+FQ==, tarball: https://registry.npmjs.org/fast-fifo/-/fast-fifo-1.3.2.tgz}
 
   fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==, tarball: https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.1.tgz}
@@ -3298,6 +3339,9 @@ packages:
   jsonfile@6.2.0:
     resolution: {integrity: sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg==, tarball: https://registry.npmjs.org/jsonfile/-/jsonfile-6.2.0.tgz}
 
+  jsonlines@0.1.1:
+    resolution: {integrity: sha512-ekDrAGso79Cvf+dtm+mL8OBI2bmAOt3gssYs833De/C9NmIpWDWyUO4zPgB5x2/OhY366dkhgfPMYfwZF7yOZA==, tarball: https://registry.npmjs.org/jsonlines/-/jsonlines-0.1.1.tgz}
+
   jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==, tarball: https://registry.npmjs.org/jsx-ast-utils/-/jsx-ast-utils-3.3.5.tgz}
     engines: {node: '>=4.0'}
@@ -3672,6 +3716,10 @@ packages:
     resolution: {integrity: sha512-weP+BZ8MVNnlCm8c0Qdc1WSWq4Qn7I+9CJGm7Qali6g44e/PUzbjNqJX5NJ9ljlNMosfJvg1fKEGILklK9cwnw==, tarball: https://registry.npmjs.org/ora/-/ora-8.2.0.tgz}
     engines: {node: '>=18'}
 
+  os-paths@4.4.0:
+    resolution: {integrity: sha512-wrAwOeXp1RRMFfQY8Sy7VaGVmPocaLwSFOYCGKSyo8qmJ+/yaafCl5BCA1IQZWqFSRBrKDYFeR9d/VyQzfH/jg==, tarball: https://registry.npmjs.org/os-paths/-/os-paths-4.4.0.tgz}
+    engines: {node: '>= 6.0'}
+
   outvariant@1.4.3:
     resolution: {integrity: sha512-+Sl2UErvtsoajRDKCE5/dBz4DIvHXQQnAxtQTF04OJxY0+DyZXSo5P5Bb7XYWOh81syohlYL24hbDwxedPUJCA==, tarball: https://registry.npmjs.org/outvariant/-/outvariant-1.4.3.tgz}
 
@@ -4032,6 +4080,10 @@ packages:
     resolution: {integrity: sha512-oMA2dcrw6u0YfxJQXm342bFKX/E4sG9rbTzO9ptUcR/e8A33cHuvStiYOwH7fszkZlZ1z/ta9AAoPk2F4qIOHA==, tarball: https://registry.npmjs.org/restore-cursor/-/restore-cursor-5.1.0.tgz}
     engines: {node: '>=18'}
 
+  retry@0.13.1:
+    resolution: {integrity: sha512-XQBQ3I8W1Cge0Seh+6gjj03LbmRFWuoszgK9ooCpwYIrhhoO80pfq4cUkU5DkknwfOfFteRwlZ56PYOGYyFWdg==, tarball: https://registry.npmjs.org/retry/-/retry-0.13.1.tgz}
+    engines: {node: '>= 4'}
+
   rettime@0.11.7:
     resolution: {integrity: sha512-DoAm1WjR1eH7z8sHPtvvUMIZh4/CSKkGCz6CxPqOrEAnOGtOuHSnSE9OC+razqxKuf4ub7pAYyl/vZV0vGs5tg==, tarball: https://registry.npmjs.org/rettime/-/rettime-0.11.7.tgz}
 
@@ -4178,6 +4230,9 @@ packages:
     resolution: {integrity: sha512-eLoXW/DHyl62zxY4SCaIgnRhuMr6ri4juEYARS8E6sCEqzKpOiE521Ucofdx+KnDZl5xmvGYaaKCk5FEOxJCoQ==, tarball: https://registry.npmjs.org/stop-iteration-iterator/-/stop-iteration-iterator-1.1.0.tgz}
     engines: {node: '>= 0.4'}
 
+  streamx@2.25.0:
+    resolution: {integrity: sha512-0nQuG6jf1w+wddNEEXCF4nTg3LtufWINB5eFEN+5TNZW7KWJp6x87+JFL43vaAUPyCfH1wID+mNVyW6OHtFamg==, tarball: https://registry.npmjs.org/streamx/-/streamx-2.25.0.tgz}
+
   strict-event-emitter@0.5.1:
     resolution: {integrity: sha512-vMgjE/GGEPEFnhFub6pa4FmJBRBVOLpIII2hvCZ8Kzb7K0hlHo7mQv6xYrBvCL2LtAIBwFUK8wvuJgTVSQ5MFQ==, tarball: https://registry.npmjs.org/strict-event-emitter/-/strict-event-emitter-0.5.1.tgz}
 
@@ -4277,6 +4332,12 @@ packages:
   tapable@2.3.2:
     resolution: {integrity: sha512-1MOpMXuhGzGL5TTCZFItxCc0AARf1EZFQkGqMm7ERKj8+Hgr5oLvJOVFcC+lRmR8hCe2S3jC4T5D7Vg/d7/fhA==, tarball: https://registry.npmjs.org/tapable/-/tapable-2.3.2.tgz}
     engines: {node: '>=6'}
+
+  tar-stream@3.1.7:
+    resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==, tarball: https://registry.npmjs.org/tar-stream/-/tar-stream-3.1.7.tgz}
+
+  text-decoder@1.2.7:
+    resolution: {integrity: sha512-vlLytXkeP4xvEq2otHeJfSQIRyWxo/oZGEbXrtEEF9Hnmrdly59sUbzZ/QgyWuLYHctCHxFF4tRQZNQ9k60ExQ==, tarball: https://registry.npmjs.org/text-decoder/-/text-decoder-1.2.7.tgz}
 
   thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6:
     resolution: {tarball: https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6}
@@ -4384,6 +4445,10 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==, tarball: https://registry.npmjs.org/undici-types/-/undici-types-6.21.0.tgz}
+
+  undici@7.25.0:
+    resolution: {integrity: sha512-xXnp4kTyor2Zq+J1FfPI6Eq3ew5h6Vl0F/8d9XU5zZQf1tX9s2Su1/3PiMmUANFULpmksxkClamIZcaUqryHsQ==, tarball: https://registry.npmjs.org/undici/-/undici-7.25.0.tgz}
+    engines: {node: '>=20.18.1'}
 
   unicorn-magic@0.3.0:
     resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==, tarball: https://registry.npmjs.org/unicorn-magic/-/unicorn-magic-0.3.0.tgz}
@@ -4507,6 +4572,14 @@ packages:
     resolution: {integrity: sha512-g/eziiSUNBSsdDJtCLB8bdYEUMj4jR7AGeUo96p/3dTafgjHhpF4RiCFPiRILwjQoDXx5MqkBr4fwWtR3Ky4Wg==, tarball: https://registry.npmjs.org/wsl-utils/-/wsl-utils-0.3.1.tgz}
     engines: {node: '>=20'}
 
+  xdg-app-paths@5.1.0:
+    resolution: {integrity: sha512-RAQ3WkPf4KTU1A8RtFx3gWywzVKe00tfOPFfl2NDGqbIFENQO4kqAJp7mhQjNj/33W5x5hiWWUdyfPq/5SU3QA==, tarball: https://registry.npmjs.org/xdg-app-paths/-/xdg-app-paths-5.1.0.tgz}
+    engines: {node: '>=6'}
+
+  xdg-portable@7.3.0:
+    resolution: {integrity: sha512-sqMMuL1rc0FmMBOzCpd0yuy9trqF2yTTVe+E9ogwCSWQCdDEtQUwrZPT6AxqtsFGRNxycgncbP/xmOOSPw5ZUw==, tarball: https://registry.npmjs.org/xdg-portable/-/xdg-portable-7.3.0.tgz}
+    engines: {node: '>= 6.0'}
+
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==, tarball: https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz}
     engines: {node: '>=0.4'}
@@ -4552,6 +4625,9 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
+
+  zod@3.24.4:
+    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==, tarball: https://registry.npmjs.org/zod/-/zod-3.24.4.tgz}
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==, tarball: https://registry.npmjs.org/zod/-/zod-3.25.76.tgz}
@@ -5040,11 +5116,11 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@hyper-labs/hyper-router@0.1.4(@ai-sdk/amazon-bedrock@4.0.96(zod@4.1.12))(@ai-sdk/openai@3.0.53(zod@4.1.12))(@openrouter/agent@0.4.0)(ai@6.0.168(zod@4.1.12))(pg@8.20.0)(sql.js@1.14.1)(zod@4.1.12)':
+  '@hyper-labs/hyper-router@0.1.4(@ai-sdk/amazon-bedrock@4.0.96(zod@4.1.12))(@ai-sdk/openai@3.0.53(zod@4.1.12))(@openrouter/agent@0.3.2)(ai@6.0.168(zod@4.1.12))(pg@8.20.0)(sql.js@1.14.1)(zod@4.1.12)':
     optionalDependencies:
       '@ai-sdk/amazon-bedrock': 4.0.96(zod@4.1.12)
       '@ai-sdk/openai': 3.0.53(zod@4.1.12)
-      '@openrouter/agent': 0.4.0
+      '@openrouter/agent': 0.3.2
       ai: 6.0.168(zod@4.1.12)
       pg: 8.20.0
       sql.js: 1.14.1
@@ -5383,7 +5459,7 @@ snapshots:
 
   '@open-draft/until@2.1.0': {}
 
-  '@openrouter/agent@0.4.0':
+  '@openrouter/agent@0.3.2':
     dependencies:
       '@openrouter/sdk': 0.12.16
       zod: 4.1.12
@@ -6495,8 +6571,25 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vercel/oidc@3.2.0':
-    optional: true
+  '@vercel/oidc@3.2.0': {}
+
+  '@vercel/sandbox@1.10.0':
+    dependencies:
+      '@vercel/oidc': 3.2.0
+      '@workflow/serde': 4.1.0-beta.2
+      async-retry: 1.3.3
+      jsonlines: 0.1.1
+      ms: 2.1.3
+      picocolors: 1.1.1
+      tar-stream: 3.1.7
+      undici: 7.25.0
+      xdg-app-paths: 5.1.0
+      zod: 3.24.4
+    transitivePeerDependencies:
+      - bare-abort-controller
+      - react-native-b4a
+
+  '@workflow/serde@4.1.0-beta.2': {}
 
   accepts@2.0.0:
     dependencies:
@@ -6629,6 +6722,10 @@ snapshots:
 
   async-function@1.0.0: {}
 
+  async-retry@1.3.3:
+    dependencies:
+      retry: 0.13.1
+
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
@@ -6640,9 +6737,13 @@ snapshots:
 
   axobject-query@4.1.0: {}
 
+  b4a@1.8.0: {}
+
   balanced-match@1.0.2: {}
 
   balanced-match@4.0.4: {}
+
+  bare-events@2.8.2: {}
 
   baseline-browser-mapping@2.10.19: {}
 
@@ -6871,6 +6972,8 @@ snapshots:
   doctrine@2.1.0:
     dependencies:
       esutils: 2.0.3
+
+  dotenv@16.6.1: {}
 
   dotenv@17.4.2: {}
 
@@ -7255,6 +7358,12 @@ snapshots:
 
   etag@1.8.1: {}
 
+  events-universal@1.0.1:
+    dependencies:
+      bare-events: 2.8.2
+    transitivePeerDependencies:
+      - bare-abort-controller
+
   eventsource-parser@3.0.6: {}
 
   eventsource@3.0.7:
@@ -7327,6 +7436,8 @@ snapshots:
       - supports-color
 
   fast-deep-equal@3.1.3: {}
+
+  fast-fifo@1.3.2: {}
 
   fast-glob@3.3.1:
     dependencies:
@@ -7819,6 +7930,8 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
+  jsonlines@0.1.1: {}
+
   jsx-ast-utils@3.3.5:
     dependencies:
       array-includes: 3.1.9
@@ -8188,6 +8301,8 @@ snapshots:
       stdin-discarder: 0.2.2
       string-width: 7.2.0
       strip-ansi: 7.2.0
+
+  os-paths@4.4.0: {}
 
   outvariant@1.4.3: {}
 
@@ -8608,6 +8723,8 @@ snapshots:
       onetime: 7.0.0
       signal-exit: 4.1.0
 
+  retry@0.13.1: {}
+
   rettime@0.11.7: {}
 
   reusify@1.1.0: {}
@@ -8844,6 +8961,15 @@ snapshots:
       es-errors: 1.3.0
       internal-slot: 1.1.0
 
+  streamx@2.25.0:
+    dependencies:
+      events-universal: 1.0.1
+      fast-fifo: 1.3.2
+      text-decoder: 1.2.7
+    transitivePeerDependencies:
+      - bare-abort-controller
+      - react-native-b4a
+
   strict-event-emitter@0.5.1: {}
 
   string-width@4.2.3:
@@ -8954,6 +9080,21 @@ snapshots:
   tailwindcss@4.2.2: {}
 
   tapable@2.3.2: {}
+
+  tar-stream@3.1.7:
+    dependencies:
+      b4a: 1.8.0
+      fast-fifo: 1.3.2
+      streamx: 2.25.0
+    transitivePeerDependencies:
+      - bare-abort-controller
+      - react-native-b4a
+
+  text-decoder@1.2.7:
+    dependencies:
+      b4a: 1.8.0
+    transitivePeerDependencies:
+      - react-native-b4a
 
   thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6: {}
 
@@ -9083,6 +9224,8 @@ snapshots:
       which-boxed-primitive: 1.1.1
 
   undici-types@6.21.0: {}
+
+  undici@7.25.0: {}
 
   unicorn-magic@0.3.0: {}
 
@@ -9232,6 +9375,14 @@ snapshots:
       is-wsl: 3.1.1
       powershell-utils: 0.1.0
 
+  xdg-app-paths@5.1.0:
+    dependencies:
+      xdg-portable: 7.3.0
+
+  xdg-portable@7.3.0:
+    dependencies:
+      os-paths: 4.4.0
+
   xtend@4.0.2:
     optional: true
 
@@ -9268,6 +9419,8 @@ snapshots:
   zod-validation-error@4.0.2(zod@4.1.12):
     dependencies:
       zod: 4.1.12
+
+  zod@3.24.4: {}
 
   zod@3.25.76: {}
 

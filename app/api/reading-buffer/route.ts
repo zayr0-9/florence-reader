@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { runBufferedAgents } from "@/lib/reading-buffer"
+import { runBufferedAgentsInVercelSandbox } from "@/lib/vercel-sandbox-runner"
 
 const requestSchema = z.object({
   userId: z.string().min(1),
@@ -39,10 +39,36 @@ export async function POST(request: Request) {
     const json = await request.json()
     const input = requestSchema.parse(json)
 
-    const result = await runBufferedAgents(input)
+    const execution = await runBufferedAgentsInVercelSandbox(input)
 
-    return NextResponse.json(result, {
-      status: result.ok ? 200 : 500,
+    if (!execution.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          visibleReadingUnitId: input.visibleReadingUnitId,
+          results: [],
+          finalMemoryState: input.priorMemoryState,
+          finalRecentImageHistory: input.recentImageHistory,
+          error: execution.error,
+        },
+        {
+          status: 500,
+          headers: execution.snapshotId
+            ? {
+                "X-Florence-Sandbox-Snapshot-Id": execution.snapshotId,
+              }
+            : undefined,
+        }
+      )
+    }
+
+    return NextResponse.json(execution.response, {
+      status: execution.response.ok ? 200 : 500,
+      headers: execution.snapshotId
+        ? {
+            "X-Florence-Sandbox-Snapshot-Id": execution.snapshotId,
+          }
+        : undefined,
     })
   } catch (error) {
     return NextResponse.json(

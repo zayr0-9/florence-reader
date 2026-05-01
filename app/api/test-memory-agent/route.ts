@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
-import { createEmptyMemoryState, runMemoryAgent } from "@/lib/memory-agent"
-import { ReadingEventPayload } from "@/lib/types"
+import { createEmptyMemoryState } from "@/lib/memory-agent"
+import { runBufferedAgentsInVercelSandbox } from "@/lib/vercel-sandbox-runner"
+import { ReadingEventPayload, type ReadingBufferRequest } from "@/lib/types"
 
 function buildSamplePayload(overrides?: Partial<ReadingEventPayload>): ReadingEventPayload {
   const nonce = Date.now()
@@ -22,18 +23,34 @@ function buildSamplePayload(overrides?: Partial<ReadingEventPayload>): ReadingEv
 }
 
 async function runSmokeTest(payload: ReadingEventPayload) {
-  const result = await runMemoryAgent({
-    payload,
+  const input: ReadingBufferRequest = {
+    userId: payload.userId,
+    bookId: payload.bookId,
+    format: payload.format,
+    visibleReadingUnitId: payload.readingUnitId,
+    units: [
+      {
+        readingUnitId: payload.readingUnitId,
+        currentText: payload.currentText,
+        previousText: payload.previousText,
+        nextText: payload.nextText,
+        progressPercent: payload.progressPercent,
+      },
+    ],
     priorMemoryState: createEmptyMemoryState(),
     recentImageHistory: [],
-  })
+  }
+
+  const execution = await runBufferedAgentsInVercelSandbox(input)
+  const result = execution.ok ? execution.response.results[0] : null
 
   const assertions = {
-    resultReturned: true,
-    updatedMemoryStateReturned: Boolean(result.updatedMemoryState),
-    summaryIsString: typeof result.updatedMemoryState.summary === "string",
-    recentSummariesIsArray: Array.isArray(result.updatedMemoryState.recentSummaries),
-    imagePayloadShapeValid: result.image
+    executionOk: execution.ok,
+    resultReturned: Boolean(result),
+    updatedMemoryStateReturned: Boolean(result?.memoryStateAfterUnit),
+    summaryIsString: typeof result?.memoryStateAfterUnit.summary === "string",
+    recentSummariesIsArray: Array.isArray(result?.memoryStateAfterUnit.recentSummaries),
+    imagePayloadShapeValid: result?.image
       ? typeof result.image.dataUrl === "string" && typeof result.image.mimeType === "string"
       : true,
     statelessContract: true,
@@ -44,6 +61,9 @@ async function runSmokeTest(payload: ReadingEventPayload) {
   return {
     passed,
     payload,
+    input,
+    snapshotId: execution.snapshotId,
+    error: execution.ok ? undefined : execution.error,
     result,
     assertions,
   }

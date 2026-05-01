@@ -118,3 +118,61 @@ This version is still intentionally reader-first:
 2. Improve exact last-opened page/location restore.
 3. Replace prompt-only image output with real image generation/storage.
 4. Decide whether to persist artifacts in IndexedDB, server DB, or sync storage later.
+
+## Vercel Sandbox execution
+
+The `/api/reading-buffer` route now executes the memory + image agent loop inside an ephemeral Vercel Sandbox VM created from a reusable base snapshot.
+
+What stays the same:
+
+- browser sends `priorMemoryState` + buffered reading units
+- sandbox worker returns `ReadingBufferResponse`
+- browser persists results in IndexedDB as before
+- no transcript persistence is required
+
+What changed:
+
+- agent execution is isolated in Vercel Sandbox
+- the runtime environment is prepared once and reused via a VM snapshot
+- `/api/reading-buffer` acts as a sandbox orchestration proxy
+
+### Required env vars
+
+Add these to `.env.local`:
+
+```bash
+OPENROUTER_API_KEY=your_key_here
+VERCEL_ACCESS_TOKEN=your_vercel_token_here
+# optional: reuse an already-created base snapshot
+VERCEL_SANDBOX_BASE_SNAPSHOT_ID=
+```
+
+In production on Vercel, OIDC-based sandbox auth is automatic. For local development, `VERCEL_ACCESS_TOKEN` is the simplest fallback if you do not have `VERCEL_OIDC_TOKEN` available.
+
+### Create the base snapshot
+
+You can warm and create the reusable base VM snapshot with:
+
+```bash
+pnpm sandbox:create-snapshot
+```
+
+The command prints the snapshot id. Save it into:
+
+```bash
+VERCEL_SANDBOX_BASE_SNAPSHOT_ID=...
+```
+
+If `VERCEL_SANDBOX_BASE_SNAPSHOT_ID` is not set, the app will lazily build a base snapshot on the first sandboxed request and keep it in process memory for reuse.
+
+### Sandbox runtime files
+
+The sandbox worker lives under:
+
+- `sandbox-runtime/reading-buffer-worker.ts`
+
+The route-side sandbox runner lives under:
+
+- `lib/vercel-sandbox-runner.ts`
+
+The worker receives JSON input through a temp file inside the VM and emits JSON response back over stdout.

@@ -30,7 +30,6 @@ async function getPdfPageCount() {
 
   const loadingTask = pdfjs.getDocument({
     data: new Uint8Array(fileData),
-    disableWorker: true,
     useWasm: false,
     isImageDecoderSupported: false,
     standardFontDataUrl,
