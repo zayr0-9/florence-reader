@@ -1,5 +1,5 @@
 import { SVGProps } from "react";
-import { RawStyledSvg } from "./RawStyledSvg";
+import { RawStyledSvg } from "./raw-styled-svg";
 
 const DRAGON_STYLE_OVERRIDES = String.raw`<style type="text/css">
   .dragon-svg .cls-0 {

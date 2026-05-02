@@ -56,7 +56,7 @@ export function PdfReader({
       setLoadingLabel("Loading PDF...");
 
       const pdfjs = await import("pdfjs-dist");
-      pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.mjs";
+      pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
       pdfModuleRef.current = pdfjs;
 
       const loadingTask = pdfjs.getDocument({

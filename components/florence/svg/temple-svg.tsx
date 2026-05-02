@@ -1,5 +1,5 @@
 import { SVGProps } from "react";
-import { RawStyledSvg } from "./RawStyledSvg";
+import { RawStyledSvg } from "./raw-styled-svg";
 
 const TEMPLE_STYLE_OVERRIDES = String.raw`<style type="text/css">
   .temple-svg .cls-0 {

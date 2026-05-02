@@ -1,5 +1,5 @@
 import { ReaderClient } from "@/components/reader-client"
-import { SiteShell } from "@/components/site-shell"
+
 import { featuredBooks } from "@/lib/mock-data"
 
 export default async function DemoReaderPage(
@@ -8,9 +8,5 @@ export default async function DemoReaderPage(
   const searchParams = await props.searchParams
   const source = typeof searchParams.source === "string" ? searchParams.source : undefined
 
-  return (
-    <SiteShell currentPath="/reader/demo">
-      <ReaderClient book={featuredBooks[0]} source={source} />
-    </SiteShell>
-  )
+  return <ReaderClient book={featuredBooks[0]} source={source} />
 }

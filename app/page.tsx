@@ -1,5 +1,5 @@
-import App from "../src/App"
+import FlorenceApp from "@/components/florence/florence-app"
 
 export default function HomePage() {
-  return <App />
+  return <FlorenceApp initialTab="Home" />
 }

@@ -2,16 +2,18 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  IconArrowLeft,
   IconArrowRight,
-  IconArrowsMinimize,
-  IconChevronRight,
   IconLoader2,
   IconSparkles,
   IconUpload,
-  IconX,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronLeft, ChevronDown, PanelLeftClose, Menu, X } from "lucide-react";
+import { AnnotationNote, IllustrationPlaceholder } from "@/components/florence/ui-primitives";
+import { AIToggle } from "@/components/florence/ai-toggle";
+import { bookRecordToManuscript, getReaderScale } from "@/lib/manuscripts";
 import {
   EpubReader,
   type EpubReaderLocation,
@@ -585,549 +587,241 @@ export function ReaderClient({
   const canMoveNext = unitIndex < Math.max(effectiveTotalUnits - 1, 0);
   const hasCurrentImage = Boolean(status.imageDataUrl);
 
+  const router = useRouter();
+  const manuscript = bookRecordToManuscript(activeBook);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const readerScale = getReaderScale("medium");
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <>
-      <div className="mx-auto h-[calc(100dvh-var(--site-header-height,73px))] max-h-[calc(100dvh-var(--site-header-height,73px))] min-h-0 w-full max-w-[2200px] overflow-hidden px-2 py-2 sm:px-6 sm:py-4 lg:px-8">
-        <div className="flex h-full min-h-0 overflow-hidden rounded-[20px] bg-[linear-gradient(180deg,#ffffff_0%,#fafaf9_100%)] shadow-[0_20px_80px_rgba(0,0,0,0.06)] sm:rounded-[28px]">
-          <div className="flex h-full min-h-0 flex-1 flex-col">
-            <div className="shrink-0 border-b border-black/10 px-3 py-2 sm:px-8 sm:py-4">
-              <div className="flex flex-col gap-2 sm:gap-4">
-                <div className="min-w-0 space-y-1">
-                  {/* <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                    {activeBook.format.toUpperCase()}
-                  </p> */}
-                  <h2 className="truncate text-md font-semibold tracking-tight text-zinc-900 sm:text-3xl">
-                    {activeBook.title}
-                  </h2>
-                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                    <p className="truncate text-xs text-muted-foreground sm:text-sm">
-                      {activeBook.author ?? "Unknown author"} · {readingUnitLabel}
-                    </p>
-                    <div className="rounded-full bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-700 shadow-sm">
-                      {progress}%
-                    </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setIsAiEnabled((value) => !value)}
-                      aria-pressed={isAiEnabled}
-                      aria-label={
-                        isAiEnabled
-                          ? "Disable AI processing"
-                          : "Enable AI processing"
-                      }
-                      className={`h-auto rounded-full border px-3 py-1.5 text-[11px] font-medium shadow-none ${
-                        isAiEnabled
-                          ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                          : "border-zinc-200 bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
-                      }`}
-                    >
-                      AI {isAiEnabled ? "On" : "Off"}
-                    </Button>
-                    {activeBook.format === "pdf" && pdfStatusLabel ? (
-                      <div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-[11px] font-medium text-sky-700">
-                        <IconLoader2
-                          className={`size-4 ${
-                            pdfStatusLabel.includes("Unable")
-                              ? ""
-                              : "animate-spin"
-                          }`}
-                        />
-                        {pdfStatusLabel}
-                      </div>
-                    ) : null}
-                    {isBufferLoading ? (
-                      <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[11px] font-medium text-amber-700">
-                        <IconLoader2 className="size-4 animate-spin" />
-                        Updating
-                      </div>
-                    ) : null}
+    <div className="flex h-[calc(100dvh-var(--site-header-height,73px))] max-h-[calc(100dvh-var(--site-header-height,73px))] overflow-hidden selection:bg-gold/40 text-ink w-full bg-page">
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.aside 
+            initial={{ x: -20, opacity: 0 }} 
+            animate={{ x: 0, opacity: 1 }} 
+            exit={{ x: -20, opacity: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }} 
+            className="w-[260px] border-r border-ink/10 flex flex-col shrink-0 h-full overflow-hidden bg-page hidden md:flex"
+          >
+            <div className="w-[260px] flex flex-col h-full">
+              {/* Back to Library */}
+              <div className="px-6 py-6 border-b border-ink/10 shrink-0">
+                <button 
+                  onClick={() => router.push('/library')} 
+                  className="flex items-center text-ink/80 hover:text-ink transition-colors text-[10px] tracking-[2px] uppercase"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5 mr-2" />
+                  Library
+                </button>
+              </div>
+
+              <div className="px-6 pt-8 pb-8 flex flex-col flex-1 overflow-y-auto">
+                {/* Logo/Book */}
+                <div className="mb-8">
+                  <div className="text-[72px] italic text-border-main leading-none mb-4 select-none pointer-events-none">
+                    {manuscript.letter}
                   </div>
+                  <h1 className="italic text-[16px] text-ink mb-1 truncate">{manuscript.title}</h1>
+                  <p className="text-[9px] text-muted tracking-[1.5px] uppercase truncate">{manuscript.author}</p>
+                </div>
+
+                <div className="flex flex-col space-y-4 text-[10px] tracking-[1.5px] uppercase text-ink-light mt-4">
+                  <p>Format: {activeBook.format}</p>
+                  <p>Progress: {progress}%</p>
+                  {isBufferLoading ? <p className="text-amber-600 flex items-center"><IconLoader2 className="w-3 h-3 mr-1 animate-spin" /> Updating</p> : null}
+                  {pdfStatusLabel && activeBook.format === 'pdf' ? <p className="text-sky-600 flex items-center">{pdfStatusLabel}</p> : null}
                 </div>
               </div>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
 
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-zinc-100">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+      <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.28 }} className="flex-1 flex flex-col h-full overflow-hidden bg-page relative">
+        <header className="flex items-center justify-between px-6 md:px-10 py-4 md:py-6 border-b border-ink/5 shrink-0 bg-page z-30">
+          <div className="flex items-center">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="mr-5 text-ink-light hover:text-ink transition-colors shrink-0 hidden md:block"
+              title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+            >
+              {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
+            <button 
+              onClick={() => router.push('/library')} 
+              className="mr-3 text-ink-light hover:text-ink transition-colors shrink-0 md:hidden"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <h2 className="text-[10px] tracking-[2px] uppercase text-ink-light truncate max-w-[150px] md:max-w-[300px]">
+              {mounted ? readingUnitLabel : "Loading..."}
+            </h2>
+          </div>
+          <div className="flex items-center gap-4 md:gap-6">
+            <AIToggle enabled={isAiEnabled} onToggle={() => setIsAiEnabled(prev => !prev)} compact={false} />
+            <span className="hidden md:block text-[10px] tracking-[2px] text-ink-light/50">
+              {progress}%
+            </span>
+            <button 
+              onClick={() => router.push('/library')} 
+              className="hidden md:flex w-8 h-8 items-center justify-center border border-ink/15 text-ink-light hover:text-ink hover:border-ink/30 rounded-sm transition-all"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </header>
 
-              {uploadedDraft ? (
-                <div className="mt-3 hidden flex-wrap items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 sm:flex">
-                  <IconUpload className="size-4" />
-                  <span>
-                    Loaded local draft: <strong>{uploadedDraft.title}</strong> (
-                    {uploadedDraft.format.toUpperCase()})
-                  </span>
-                  <span className="text-emerald-700">{uploadedDraft.size}</span>
-                </div>
-              ) : null}
+        <div 
+          className="flex-1 overflow-y-auto px-4 md:px-12 lg:px-20 py-8 md:py-16 flex justify-center w-full"
+          style={{ '--drop-cap-color': manuscript.colorBgText } as React.CSSProperties}
+        >
+          <div className="flex-1 max-w-[640px] w-full text-ink flex flex-col min-h-0">
+            {/* Ink dots — chapter start */}
+            <div className="flex justify-center gap-[6px] mb-6">
+              {[0,1,2,3,4].map(i => (
+                <motion.div key={i} className="w-[4px] h-[4px] rounded-full bg-ink/15" animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 3, repeat: Infinity, delay: i * 0.18 }} />
+              ))}
             </div>
 
-            <div className="grid min-h-0 flex-1 grid-cols-1 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.8fr)]">
-              <section className="min-h-0 bg-white xl:border-r xl:border-black/10">
-                <div className="flex h-full min-h-0 flex-col">
-                  <div className="min-h-0 flex-1 px-2 py-1 sm:px-5 sm:py-3 lg:px-6 lg:py-4">
-                    <div className="relative flex h-full min-h-0 flex-col gap-2 sm:gap-4">
-                      {storageStatus ? (
-                        <div className="rounded-xl bg-zinc-50 px-3 py-2 text-xs text-muted-foreground sm:rounded-2xl sm:p-4 sm:text-sm">
-                          {storageStatus}
-                        </div>
-                      ) : null}
+            {/* Floating dots */}
+            <div className="flex justify-center gap-[10px] mb-4">
+              {[0,1,2].map(i => (
+                <motion.div key={i} className="w-[3px] h-[3px] rounded-full bg-ink/10" animate={{ scale: [1, 1.12, 1], y: [0, -2, 0] }} transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }} />
+              ))}
+            </div>
 
-                      <div className="min-h-0 flex-1 overflow-hidden rounded-[18px] bg-[#fcfcfb] shadow-inner sm:rounded-[28px]">
-                        <div className="h-full min-h-0 overflow-hidden p-1.5 sm:p-4">
-                          {fileData ? (
-                            activeBook.format === "pdf" ? (
-                              <PdfReader
-                                fileData={fileData}
-                                unitIndex={unitIndex}
-                                onPageCount={setTotalUnits}
-                                onTextReady={setUnitTexts}
-                                zoomPercent={pdfZoomPercent}
-                                onStatusChange={setPdfStatusLabel}
-                              />
-                            ) : (
-                              <EpubReader
-                                fileData={fileData}
-                                unitIndex={unitIndex}
-                                initialCfi={epubLocation.cfi}
-                                navigationRequest={epubNavigationRequest}
-                                onUnitCount={setTotalUnits}
-                                onTextReady={handleEpubTextReady}
-                                onLocationChange={handleEpubLocationChange}
-                              />
-                            )
-                          ) : (
-                            <article className="mx-auto max-w-3xl space-y-3 rounded-[18px] bg-white p-4 text-base leading-7 text-zinc-800 shadow-sm sm:rounded-[20px] sm:p-6 sm:text-lg sm:leading-9">
-                              <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                                Preview
-                              </p>
-                              <p>{units[unitIndex]}</p>
-                              <p className="text-sm leading-6 text-zinc-600 sm:text-base sm:leading-8">
-                                Local reader preview.
-                              </p>
-                            </article>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="pointer-events-none absolute inset-x-0 bottom-3 z-10 px-2 sm:px-6">
-                        <div
-                          className={`pointer-events-auto absolute bottom-0 flex items-center gap-2 rounded-full border border-white/70 bg-white/65 text-xs shadow-[0_12px_40px_rgba(0,0,0,0.16)] backdrop-blur-xl will-change-transform transition-[left,transform,padding,width,max-width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] supports-[backdrop-filter]:bg-white/45 [&>*]:shrink-0 sm:text-sm ${
-                            isFloatingControlsCollapsed
-                              ? "left-0 w-max translate-x-0 px-1.5 py-1.5 sm:px-2 sm:py-2"
-                              : "left-1/2 w-[calc(100vw-1.5rem)] max-w-[calc(100vw-1.5rem)] -translate-x-1/2 justify-start overflow-x-auto px-2 py-2 sm:w-max sm:max-w-none sm:justify-center sm:overflow-visible sm:px-4 sm:py-3"
-                          }`}
-                        >
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="h-8 rounded-full border-white/80 bg-white/70 px-2 sm:h-10 sm:px-3"
-                            onClick={() =>
-                              setIsFloatingControlsCollapsed((value) => !value)
-                            }
-                            aria-label={
-                              isFloatingControlsCollapsed
-                                ? "Expand floating controls"
-                                : "Collapse floating controls"
-                            }
-                          >
-                            {isFloatingControlsCollapsed ? (
-                              <>
-                                <IconChevronRight className="size-4" />
-                                {/* <span className="sr-only">Expand controls</span> */}
-                              </>
-                            ) : (
-                              <IconArrowsMinimize className="size-4" />
-                            )}
-                          </Button>
-
-                          {isFloatingControlsCollapsed ? (
-                            <div className="flex items-center gap-2">
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="size-8 rounded-full border-white/80 bg-white/70 sm:size-10"
-                                disabled={!canMovePrev}
-                                onClick={() => {
-                                  if (activeBook.format === "epub") {
-                                    setEpubNavigationRequest({
-                                      direction: "prev",
-                                      nonce: Date.now(),
-                                    });
-                                    return;
-                                  }
-
-                                  setUnitIndex((value) =>
-                                    Math.max(0, value - 1),
-                                  );
-                                }}
-                                aria-label="Previous"
-                              >
-                                <IconArrowLeft className="size-4" />
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="icon"
-                                className="size-8 rounded-full border-white/80 bg-white/70 sm:size-10"
-                                disabled={!canMoveNext}
-                                onClick={() => {
-                                  if (activeBook.format === "epub") {
-                                    setEpubNavigationRequest({
-                                      direction: "next",
-                                      nonce: Date.now(),
-                                    });
-                                    return;
-                                  }
-
-                                  setUnitIndex((value) =>
-                                    Math.min(
-                                      effectiveTotalUnits - 1,
-                                      value + 1,
-                                    ),
-                                  );
-                                }}
-                                aria-label="Next"
-                              >
-                                <IconArrowRight className="size-4" />
-                              </Button>
-                            </div>
-                          ) : (
-                            <>
-                              <div className="rounded-full bg-zinc-900/5 px-3 py-1.5 text-center sm:px-4 sm:py-2">
-                                <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px] sm:tracking-[0.22em]">
-                                  Reading
-                                </p>
-                                <p className="mt-0.5 font-medium text-zinc-900 sm:mt-1">
-                                  {readingUnitLabel}
-                                </p>
-                              </div>
-                              <div className="rounded-full bg-zinc-900/5 px-3 py-1.5 text-center sm:px-4 sm:py-2">
-                                <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px] sm:tracking-[0.22em]">
-                                  Total
-                                </p>
-                                <p className="mt-0.5 font-medium text-zinc-900 sm:mt-1">
-                                  {effectiveTotalUnits}
-                                </p>
-                              </div>
-                              {/* <div className="rounded-full bg-zinc-900/5 px-4 py-2 text-center">
-                                <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground sm:text-[10px] sm:tracking-[0.22em]">
-                                  Buffer size
-                                </p>
-                                <p className="mt-0.5 font-medium text-zinc-900 sm:mt-1">
-                                  {DEFAULT_BUFFER_SIZE}
-                                </p>
-                              </div> */}
-                              {activeBook.format === "pdf" ? (
-                                <>
-                                  <div className="mx-1 hidden h-10 w-px bg-black/10 lg:block" />
-                                  <div className="flex items-center gap-2">
-                                    <Button
-                                      type="button"
-                                      variant="outline"
-                                      className="h-8 rounded-full border-white/80 bg-white/70 px-2 text-xs sm:h-10 sm:px-4 sm:text-sm"
-                                      onClick={() =>
-                                        setPdfZoomPercent((value) =>
-                                          Math.max(
-                                            PDF_MIN_ZOOM,
-                                            value - PDF_ZOOM_STEP,
-                                          ),
-                                        )
-                                      }
-                                    >
-                                      -
-                                    </Button>
-                                    <label className="flex items-center gap-2 rounded-full bg-zinc-900/5 px-3 py-2">
-                                      <span className="min-w-[54px] text-center font-medium text-zinc-900">
-                                        {pdfZoomPercent}%
-                                      </span>
-                                      <input
-                                        type="range"
-                                        min={PDF_MIN_ZOOM}
-                                        max={PDF_MAX_ZOOM}
-                                        step={PDF_ZOOM_STEP}
-                                        value={pdfZoomPercent}
-                                        onChange={(event) =>
-                                          setPdfZoomPercent(
-                                            Number(event.target.value),
-                                          )
-                                        }
-                                        className="h-2 w-24 accent-zinc-900 sm:w-28"
-                                        aria-label="Adjust PDF zoom"
-                                      />
-                                    </label>
-                                    <Button
-                                      type="button"
-                                      variant="outline"
-                                      className="h-8 rounded-full border-white/80 bg-white/70 px-2 text-xs sm:h-10 sm:px-4 sm:text-sm"
-                                      onClick={() =>
-                                        setPdfZoomPercent((value) =>
-                                          Math.min(
-                                            PDF_MAX_ZOOM,
-                                            value + PDF_ZOOM_STEP,
-                                          ),
-                                        )
-                                      }
-                                    >
-                                      +
-                                    </Button>
-                                    <Button
-                                      type="button"
-                                      variant="outline"
-                                      className="h-8 rounded-full border-white/80 bg-white/70 px-2 text-xs sm:h-10 sm:px-4 sm:text-sm"
-                                      onClick={() => setPdfZoomPercent(100)}
-                                    >
-                                      Fit width
-                                    </Button>
-                                  </div>
-                                </>
-                              ) : null}
-                              <div className="mx-1 hidden h-10 w-px bg-black/10 lg:block" />
-                              <div className="flex items-center gap-2">
-                                <Button
-                                  variant="outline"
-                                  className="h-8 rounded-full border-white/80 bg-white/70 px-2 text-xs sm:h-10 sm:px-4 sm:text-sm"
-                                  disabled={!canMovePrev}
-                                  onClick={() => {
-                                    if (activeBook.format === "epub") {
-                                      setEpubNavigationRequest({
-                                        direction: "prev",
-                                        nonce: Date.now(),
-                                      });
-                                      return;
-                                    }
-
-                                    setUnitIndex((value) =>
-                                      Math.max(0, value - 1),
-                                    );
-                                  }}
-                                >
-                                  <IconArrowLeft className="size-4" />
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  className="h-8 rounded-full border-white/80 bg-white/70 px-2 text-xs sm:h-10 sm:px-4 sm:text-sm"
-                                  disabled={!canMoveNext}
-                                  onClick={() => {
-                                    if (activeBook.format === "epub") {
-                                      setEpubNavigationRequest({
-                                        direction: "next",
-                                        nonce: Date.now(),
-                                      });
-                                      return;
-                                    }
-
-                                    setUnitIndex((value) =>
-                                      Math.min(
-                                        effectiveTotalUnits - 1,
-                                        value + 1,
-                                      ),
-                                    );
-                                  }}
-                                >
-                                  <IconArrowRight className="size-4" />
-                                </Button>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+             <AnimatePresence mode="wait">
+               <motion.div
+                 key={unitIndex}
+                 initial={{ y: 14, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 exit={{ y: -14, opacity: 0 }}
+                 transition={{ duration: 0.32 }}
+                 className="w-full flex-1 min-h-[500px]"
+               >
+              {mounted ? (
+                fileData ? (
+                  activeBook.format === "pdf" ? (
+                    <PdfReader
+                      fileData={fileData}
+                      unitIndex={unitIndex}
+                      onPageCount={setTotalUnits}
+                      onTextReady={setUnitTexts}
+                      zoomPercent={pdfZoomPercent}
+                      onStatusChange={setPdfStatusLabel}
+                    />
+                  ) : (
+                    <EpubReader
+                      fileData={fileData}
+                      unitIndex={unitIndex}
+                      initialCfi={epubLocation.cfi}
+                      navigationRequest={epubNavigationRequest}
+                      onUnitCount={setTotalUnits}
+                      onTextReady={handleEpubTextReady}
+                      onLocationChange={handleEpubLocationChange}
+                    />
+                  )
+                ) : (
+                  <div className="flex items-center justify-center h-full text-ink-light">
+                     <IconLoader2 className="w-5 h-5 animate-spin mr-2" /> Loading document...
                   </div>
-                </div>
-              </section>
+                )
+              ) : null}
+             </motion.div>
+            </AnimatePresence>
 
-              <section className="hidden min-h-0 bg-zinc-50/60 xl:block">
-                <div className="flex h-full min-h-0 flex-col">
-                  <div className="shrink-0 border-b border-black/10 px-6 py-4 sm:px-8">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-                          Generated image
-                        </p>
-                        {/* <h3 className="mt-1 text-xl font-semibold text-zinc-900">
-                          {status.latestImageLabel}
-                        </h3> */}
-                        {/* <p className="mt-1 text-sm text-zinc-600">
-                          Illustration panel for the current reading context.
-                        </p> */}
-                        {generatedImages.length} stored
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          className="rounded-full"
-                          onClick={() => setIsGalleryOpen(true)}
-                        >
-                          Open gallery
-                        </Button>
-                        <IconSparkles className="mt-1 size-5 text-amber-500" />
-                      </div>
-                    </div>
+            {/* Ink dots — chapter end */}
+            <div className="flex justify-center gap-[6px] mt-6">
+              {[0,1,2,3,4].map(i => (
+                <motion.div key={`end-${i}`} className="w-[4px] h-[4px] rounded-full bg-ink/15" animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 3, repeat: Infinity, delay: i * 0.18 }} />
+              ))}
+            </div>
+            
+            <div className="flex justify-between items-center py-6 mt-8 mb-12 border-t border-ink/10">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full border-ink/20 w-10 h-10 hover:bg-ink/5"
+                disabled={!canMovePrev}
+                onClick={() => {
+                  if (activeBook.format === "epub") {
+                    setEpubNavigationRequest({
+                      direction: "prev",
+                      nonce: Date.now(),
+                    });
+                    return;
+                  }
+                  setUnitIndex((value) => Math.max(0, value - 1));
+                }}
+              >
+                <ChevronLeft className="w-4 h-4 text-ink" />
+              </Button>
+              <span className="text-[10px] tracking-[2px] text-ink-light uppercase">
+                {unitIndex + 1} / {Math.max(1, effectiveTotalUnits)}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full border-ink/20 w-10 h-10 hover:bg-ink/5"
+                disabled={!canMoveNext}
+                onClick={() => {
+                  if (activeBook.format === "epub") {
+                    setEpubNavigationRequest({
+                      direction: "next",
+                      nonce: Date.now(),
+                    });
+                    return;
+                  }
+                  setUnitIndex((value) => Math.min(effectiveTotalUnits - 1, value + 1));
+                }}
+              >
+                <IconArrowRight className="size-4 text-ink" />
+              </Button>
+            </div>
+            
+            {/* Mobile Illustration */}
+            <div className="lg:hidden w-full mb-12">
+               {status.imageDataUrl ? (
+                  <div className="w-full aspect-[4/3] rounded-sm overflow-hidden border border-ink/10 mb-4 fade-in">
+                    <img src={status.imageDataUrl} alt="AI Generation" className="w-full h-full object-cover mix-blend-multiply opacity-90 saturate-50" />
                   </div>
-
-                  <div className="flex min-h-0 flex-1 flex-col gap-4 p-4 sm:p-5 lg:p-6">
-                    {hasCurrentImage ? (
-                      <div className="overflow-hidden rounded-[24px]   bg-[linear-gradient(180deg,rgba(251,191,36,0.10),rgba(16,185,129,0.10)),#ffffff] p-3 shadow-sm sm:p-4 xl:flex-none">
-                        <img
-                          src={status.imageDataUrl}
-                          alt={status.latestImageLabel}
-                          className="mx-auto block aspect-[4/5] max-h-[48vh] w-full rounded-[18px]   bg-white object-contain xl:max-h-[40vh]"
-                        />
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </section>
+               ) : (
+                  <IllustrationPlaceholder title={mounted ? readingUnitLabel : "Loading"} isMobile={true} isEnhanced={isAiEnabled} />
+               )}
+               {status.memory === 'ready' && status.lastSummary && (
+                 <AnnotationNote compact />
+               )}
             </div>
           </div>
 
-          {isGalleryOpen ? (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm sm:p-8"
-              onClick={() => setIsGalleryOpen(false)}
-            >
-              <div
-                className="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/20 bg-white shadow-[0_30px_120px_rgba(0,0,0,0.28)]"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <div className="flex items-start justify-between gap-4 border-b border-black/10 px-6 py-5 sm:px-8">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-                      Gallery
-                    </p>
-                    <h3 className="mt-1 text-2xl font-semibold text-zinc-900">
-                      Generated images for {activeBook.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-zinc-600">
-                      {generatedImages.length} stored image
-                      {generatedImages.length === 1 ? "" : "s"}
-                    </p>
+          {/* Desktop Illustration Placeholder */}
+          <div className="hidden lg:flex w-[260px] xl:w-[320px] shrink-0 sticky top-0 flex-col items-start ml-12 xl:ml-20 h-[calc(100vh-200px)] pt-2">
+             {status.imageDataUrl ? (
+                <div className="w-full aspect-[3/4] rounded-[1px] overflow-hidden border border-ink/10 shadow-sm fade-in relative group transition-opacity">
+                  <div className="absolute inset-0 bg-ink/5 mix-blend-multiply opacity-20 pointer-events-none z-10"></div>
+                  <img src={status.imageDataUrl} alt="AI Generation" className="w-full h-full object-cover mix-blend-multiply opacity-[0.85] saturate-[0.6] sepia-[0.2]" />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-page/90 to-transparent p-4 z-20">
+                     <span className="text-[8px] uppercase tracking-[2px] text-ink/70 mb-1 block">AI Frontispiece</span>
+                     <p className="text-[12px] italic text-ink/90 font-serif leading-snug">"{mounted ? readingUnitLabel : "Loading"}"</p>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full"
-                    onClick={() => setIsGalleryOpen(false)}
-                  >
-                    <IconX className="size-4" />
-                  </Button>
                 </div>
-
-                <div className="overflow-y-auto p-6 sm:p-8">
-                  {generatedImages.length ? (
-                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                      {generatedImages.map((image) => (
-                        <div
-                          key={image.key}
-                          className="overflow-hidden rounded-[24px]   bg-zinc-50 shadow-sm"
-                        >
-                          <img
-                            src={image.imageDataUrl}
-                            alt={`Generated scene for ${image.readingUnitId}`}
-                            className="block aspect-[4/5] w-full bg-white object-contain"
-                          />
-                          <div className="border-t border-black/10 bg-white p-4 text-sm">
-                            <div className="flex items-center justify-between gap-3">
-                              <strong className="truncate text-zinc-900">
-                                {image.readingUnitId}
-                              </strong>
-                              <span className="shrink-0 text-[11px] text-muted-foreground">
-                                {new Date(image.createdAt).toLocaleDateString()}
-                              </span>
-                            </div>
-                            <p className="mt-2 text-xs text-zinc-600">
-                              {image.imageMimeType}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="rounded-[24px] border border-dashed border-black/15 bg-zinc-50 p-8 text-sm text-muted-foreground">
-                      No generated images for this book have been stored yet.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {isGalleryOpen ? (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm sm:p-8"
-              onClick={() => setIsGalleryOpen(false)}
-            >
-              <div
-                className="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/20 bg-white shadow-[0_30px_120px_rgba(0,0,0,0.28)]"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <div className="flex items-start justify-between gap-4 border-b border-black/10 px-6 py-5 sm:px-8">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-                      Gallery
-                    </p>
-                    <h3 className="mt-1 text-2xl font-semibold text-zinc-900">
-                      Generated images for {activeBook.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-zinc-600">
-                      {generatedImages.length} stored image
-                      {generatedImages.length === 1 ? "" : "s"}
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full"
-                    onClick={() => setIsGalleryOpen(false)}
-                  >
-                    <IconX className="size-4" />
-                  </Button>
-                </div>
-
-                <div className="overflow-y-auto p-6 sm:p-8">
-                  {generatedImages.length ? (
-                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                      {generatedImages.map((image) => (
-                        <div
-                          key={image.key}
-                          className="overflow-hidden rounded-[24px]   bg-zinc-50 shadow-sm"
-                        >
-                          <img
-                            src={image.imageDataUrl}
-                            alt={`Generated scene for ${image.readingUnitId}`}
-                            className="block aspect-[4/5] w-full bg-white object-contain"
-                          />
-                          <div className="border-t border-black/10 bg-white p-4 text-sm">
-                            <div className="flex items-center justify-between gap-3">
-                              <strong className="truncate text-zinc-900">
-                                {image.readingUnitId}
-                              </strong>
-                              <span className="shrink-0 text-[11px] text-muted-foreground">
-                                {new Date(image.createdAt).toLocaleDateString()}
-                              </span>
-                            </div>
-                            <p className="mt-2 text-xs text-zinc-600">
-                              {image.imageMimeType}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="rounded-[24px] border border-dashed border-black/15 bg-zinc-50 p-8 text-sm text-muted-foreground">
-                      No generated images for this book have been stored yet.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : null}
+             ) : (
+                <IllustrationPlaceholder title={mounted ? readingUnitLabel : "Loading"} isEnhanced={isAiEnabled} />
+             )}
+             
+             {status.memory === 'ready' && status.lastSummary && (
+               <div className="mt-8 w-full">
+                  <AnnotationNote />
+               </div>
+             )}
+          </div>
         </div>
-      </div>
-    </>
+      </motion.main>
+    </div>
   );
 }

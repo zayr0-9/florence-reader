@@ -1,4 +1,6 @@
-export function GlobeSVG({ className, ...props }: any) {
+import { SVGProps } from "react";
+
+export function GlobeSVG({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" className={className} strokeMiterlimit="10" {...props}>
       <path fill="transparent" stroke="currentColor" strokeWidth="0.425" d="m104.9 37.1c28.1 0.7 59.2 23.8 61.4 62.4l1.7 0.8 0.6 1.1c0 5.5-0.1 8.9-1.4 8.7l-1.6-0.1c-1 9-4.2 17.7-11.3 29.5l-4.8 7.2c-9.4 9.9-22.2 17.9-42.9 21.8h-14.1c-23.1-2.6-52-17.7-57.8-61.2l-2-0.6-1.1-4.2v-3.2l0.9-1.4 2-0.8c2.3-25.9 22.3-55.8 60.3-60h10.1z"/>
