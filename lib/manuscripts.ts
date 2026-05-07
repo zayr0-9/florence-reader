@@ -34,6 +34,7 @@ export type Manuscript = {
 export const manuscripts: Manuscript[] = [
   {
     id: 1,
+    backendId: "book-dune",
     genre: "POETRY",
     year: "c. 1390",
     letter: "W",
@@ -57,6 +58,7 @@ export const manuscripts: Manuscript[] = [
   },
   {
     id: 2,
+    backendId: "book-frankenstein",
     genre: "EPIC",
     year: "c. 9th C.",
     letter: "S",
@@ -87,6 +89,7 @@ export const manuscripts: Manuscript[] = [
   },
   {
     id: 3,
+    backendId: "book-mobydick",
     genre: "ROMANCE",
     year: "c. 1470",
     letter: "I",
@@ -110,6 +113,7 @@ export const manuscripts: Manuscript[] = [
   },
   {
     id: 4,
+    backendId: "book-dune",
     genre: "ALLEGORY",
     year: "c. 1308",
     letter: "M",
@@ -133,6 +137,7 @@ export const manuscripts: Manuscript[] = [
   },
   {
     id: 5,
+    backendId: "book-frankenstein",
     genre: "CHANSON",
     year: "c. 1040",
     letter: "K",
@@ -156,6 +161,7 @@ export const manuscripts: Manuscript[] = [
   },
   {
     id: 6,
+    backendId: "book-mobydick",
     genre: "NOVELLA",
     year: "c. 1353",
     letter: "T",
@@ -244,3 +250,4 @@ export function bookRecordToManuscript(book: BookRecord): Manuscript {
     ],
   };
 }
+

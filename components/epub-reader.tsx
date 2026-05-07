@@ -213,11 +213,6 @@ export function EpubReader({
     if (lastNavigationNonceRef.current === navigationRequest.nonce) return;
 
     lastNavigationNonceRef.current = navigationRequest.nonce;
-    setStatus(
-      navigationRequest.direction === "next"
-        ? "Moving to next EPUB page…"
-        : "Moving to previous EPUB page…",
-    );
 
     const movePromise =
       navigationRequest.direction === "next"

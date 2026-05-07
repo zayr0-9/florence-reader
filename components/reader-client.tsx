@@ -1,41 +1,27 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  IconArrowRight,
-  IconLoader2,
-  IconSparkles,
-  IconUpload,
-} from "@tabler/icons-react";
+import { IconArrowRight, IconLoader2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronDown, PanelLeftClose, Menu, X } from "lucide-react";
+import { ChevronLeft, PanelLeftClose, Menu, X } from "lucide-react";
 import { AnnotationNote, IllustrationPlaceholder } from "@/components/florence/ui-primitives";
 import { AIToggle } from "@/components/florence/ai-toggle";
-import { bookRecordToManuscript, getReaderScale } from "@/lib/manuscripts";
+import { bookRecordToManuscript } from "@/lib/manuscripts";
 import {
   EpubReader,
   type EpubReaderLocation,
   type EpubReaderNavigationRequest,
 } from "@/components/epub-reader";
-import {
-  PdfReader,
-  PDF_MAX_ZOOM,
-  PDF_MIN_ZOOM,
-  PDF_ZOOM_STEP,
-} from "@/components/pdf-reader";
+import { PdfReader } from "@/components/pdf-reader";
 import {
   getStoredBook,
   toBookRecord,
   updateStoredProgress,
 } from "@/lib/book-storage";
 import { sampleBookText } from "@/lib/mock-data";
-import {
-  buildReadingUnitLabel,
-  estimateProgress,
-  getFormatLabel,
-} from "@/lib/reader-utils";
+import { buildReadingUnitLabel, estimateProgress } from "@/lib/reader-utils";
 import {
   buildBufferedUnits,
   buildReadingUnitDedupeKey,
@@ -43,7 +29,6 @@ import {
   shouldRefillBuffer,
 } from "@/lib/reader-buffer-utils";
 import {
-  getGeneratedImagesForBook,
   getReadingUnitResult,
   getSessionState,
   persistBufferResponse,
@@ -51,7 +36,6 @@ import {
 import { createEmptyMemoryState } from "@/lib/memory-agent";
 import {
   BookRecord,
-  GeneratedImageRecord,
   MemoryState,
   ReaderSessionStateRecord,
   ReadingBufferRequest,
@@ -59,13 +43,6 @@ import {
   ReadingUnitResultRecord,
   RecentImageHistoryItem,
 } from "@/lib/types";
-
-type UploadDraft = {
-  title: string;
-  format: "pdf" | "epub";
-  size: string;
-  firstUnit: string;
-};
 
 const DEMO_USER_ID = "demo-user";
 
@@ -180,7 +157,6 @@ export function ReaderClient({
   const [fileData, setFileData] = useState<ArrayBuffer | null>(null);
   const [status, setStatus] = useState<StatusView>(() => buildDefaultStatus());
   const [isBufferLoading, setIsBufferLoading] = useState(false);
-  const [uploadedDraft, setUploadedDraft] = useState<UploadDraft | null>(null);
   const [epubLocation, setEpubLocation] = useState<Partial<EpubReaderLocation>>(
     {},
   );
@@ -193,12 +169,6 @@ export function ReaderClient({
     useState<ReaderSessionStateRecord | null>(null);
   const [visibleResult, setVisibleResult] =
     useState<ReadingUnitResultRecord | null>(null);
-  const [generatedImages, setGeneratedImages] = useState<
-    GeneratedImageRecord[]
-  >([]);
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [isFloatingControlsCollapsed, setIsFloatingControlsCollapsed] =
-    useState(false);
   const [pdfZoomPercent, setPdfZoomPercent] = useState(100);
   const [pdfStatusLabel, setPdfStatusLabel] = useState("");
   const [isAiEnabled, setIsAiEnabled] = useState(true);
@@ -223,15 +193,7 @@ export function ReaderClient({
 
   useEffect(() => {
     if (source !== "upload") return;
-
-    const raw = sessionStorage.getItem("florence-upload-draft");
-    if (!raw) return;
-
-    try {
-      setUploadedDraft(JSON.parse(raw) as UploadDraft);
-    } catch {
-      setUploadedDraft(null);
-    }
+    sessionStorage.removeItem("florence-upload-draft");
   }, [source]);
 
   useEffect(() => {
@@ -241,7 +203,6 @@ export function ReaderClient({
     setEpubNavigationRequest(null);
     setSessionState(null);
     setVisibleResult(null);
-    setGeneratedImages([]);
     setStatus(buildDefaultStatus());
     setPdfZoomPercent(100);
     setPdfStatusLabel("");
@@ -335,25 +296,6 @@ export function ReaderClient({
   }, [activeBook.id, readingUnitLabel, sessionState?.updatedAt]);
 
   useEffect(() => {
-    let cancelled = false;
-
-    getGeneratedImagesForBook(DEMO_USER_ID, activeBook.id)
-      .then((images) => {
-        if (cancelled) return;
-        setGeneratedImages(images);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setGeneratedImages([]);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [activeBook.id, sessionState?.updatedAt]);
-
-  useEffect(() => {
     setStatus(
       buildStatusFromResult(
         visibleResult,
@@ -366,21 +308,6 @@ export function ReaderClient({
     sessionState?.recentImageHistory,
     visibleResult,
   ]);
-
-  useEffect(() => {
-    if (!isGalleryOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsGalleryOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isGalleryOpen]);
 
   useEffect(() => {
     if (isAiEnabled) return;
@@ -585,13 +512,9 @@ export function ReaderClient({
 
   const canMovePrev = unitIndex > 0;
   const canMoveNext = unitIndex < Math.max(effectiveTotalUnits - 1, 0);
-  const hasCurrentImage = Boolean(status.imageDataUrl);
-
   const router = useRouter();
   const manuscript = bookRecordToManuscript(activeBook);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const readerScale = getReaderScale("medium");
-
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -634,6 +557,7 @@ export function ReaderClient({
                   <p>Format: {activeBook.format}</p>
                   <p>Progress: {progress}%</p>
                   {isBufferLoading ? <p className="text-amber-600 flex items-center"><IconLoader2 className="w-3 h-3 mr-1 animate-spin" /> Updating</p> : null}
+                  {storageStatus ? <p className="text-crimson flex items-center">{storageStatus}</p> : null}
                   {pdfStatusLabel && activeBook.format === 'pdf' ? <p className="text-sky-600 flex items-center">{pdfStatusLabel}</p> : null}
                 </div>
               </div>
@@ -726,10 +650,17 @@ export function ReaderClient({
                       onLocationChange={handleEpubLocationChange}
                     />
                   )
-                ) : (
+                ) : activeBook.id.startsWith("local-") ? (
                   <div className="flex items-center justify-center h-full text-ink-light">
-                     <IconLoader2 className="w-5 h-5 animate-spin mr-2" /> Loading document...
+                    <IconLoader2 className="w-5 h-5 animate-spin mr-2" /> Loading document...
                   </div>
+                ) : (
+                  <article className="mx-auto max-w-3xl space-y-6 border border-ink/10 bg-white/35 p-6 text-[17px] leading-9 text-ink shadow-sm md:p-8">
+                    <p className="text-[10px] uppercase tracking-[2px] text-ink-light">
+                      Preview
+                    </p>
+                    <p className="font-serif">{units[unitIndex] ?? units[0]}</p>
+                  </article>
                 )
               ) : null}
              </motion.div>
@@ -807,7 +738,7 @@ export function ReaderClient({
                   <img src={status.imageDataUrl} alt="AI Generation" className="w-full h-full object-cover mix-blend-multiply opacity-[0.85] saturate-[0.6] sepia-[0.2]" />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-page/90 to-transparent p-4 z-20">
                      <span className="text-[8px] uppercase tracking-[2px] text-ink/70 mb-1 block">AI Frontispiece</span>
-                     <p className="text-[12px] italic text-ink/90 font-serif leading-snug">"{mounted ? readingUnitLabel : "Loading"}"</p>
+                     <p className="text-[12px] italic text-ink/90 font-serif leading-snug">&quot;{mounted ? readingUnitLabel : "Loading"}&quot;</p>
                   </div>
                 </div>
              ) : (

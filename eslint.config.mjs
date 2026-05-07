@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated/vendor files copied for pdf.js runtime support:
+    "public/pdf.worker.mjs",
+    "public/pdf-wasm/**",
   ]),
 ]);
 

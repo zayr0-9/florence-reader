@@ -506,12 +506,34 @@ export async function runBufferedMemoryAgent(
     storage: new EphemeralStorage(),
   })
 
-  const runtimeResult = await runtime.run({
-    sessionId: buildBatchSessionId(input.payloads),
-    input: userInput,
-    maxSteps: 3,
-    ephemeral: true,
-  })
+  let runtimeResult: Awaited<ReturnType<typeof runtime.run>>
+
+  try {
+    runtimeResult = await runtime.run({
+      sessionId: buildBatchSessionId(input.payloads),
+      input: userInput,
+      maxSteps: 3,
+      ephemeral: true,
+    })
+  } catch (error) {
+    const skippedReason = `Memory agent unavailable: ${
+      error instanceof Error ? error.message : "Unknown provider error."
+    }`
+    const results = buildSkippedResults(input.payloads, input.priorMemoryState, skippedReason)
+
+    return {
+      invoked: false,
+      results,
+      finalMemoryState: results[results.length - 1]?.updatedMemoryState || {
+        ...input.priorMemoryState,
+        updatedAt: new Date().toISOString(),
+      },
+      finalRecentImageHistory: [...input.recentImageHistory],
+      skippedReason,
+      runtimeStatus: "provider_error",
+      lastToolOutput: skippedReason,
+    }
+  }
 
   const reversedMessages = [...runtimeResult.messages].reverse()
   const batchToolMessage = reversedMessages.find(
