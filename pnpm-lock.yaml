@@ -29,6 +29,12 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      lucide-react:
+        specifier: ^0.546.0
+        version: 0.546.0(react@19.2.4)
+      motion:
+        specifier: ^12.23.24
+        version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next:
         specifier: 16.2.4
         version: 16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -3425,6 +3431,11 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==, tarball: https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz}
 
+  lucide-react@0.546.0:
+    resolution: {integrity: sha512-Z94u6fKT43lKeYHiVyvyR8fT7pwCzDu7RyMPpTvh054+xahSgj4HFQ+NmflvzdXsoAjYGdCguGaFKYuvq0ThCQ==, tarball: https://registry.npmjs.org/lucide-react/-/lucide-react-0.546.0.tgz}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==, tarball: https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz}
 
@@ -4278,8 +4289,8 @@ packages:
     resolution: {integrity: sha512-1MOpMXuhGzGL5TTCZFItxCc0AARf1EZFQkGqMm7ERKj8+Hgr5oLvJOVFcC+lRmR8hCe2S3jC4T5D7Vg/d7/fhA==, tarball: https://registry.npmjs.org/tapable/-/tapable-2.3.2.tgz}
     engines: {node: '>=6'}
 
-  thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6:
-    resolution: {tarball: https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6}
+  thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/34a2891445d535c120a5cebcacd82170b37899ea:
+    resolution: {tarball: https://codeload.github.com/edrlab/thorium-locales/tar.gz/34a2891445d535c120a5cebcacd82170b37899ea}
     version: 1.0.0
 
   tiny-invariant@1.3.3:
@@ -4836,7 +4847,7 @@ snapshots:
 
   '@edrlab/thorium-web@1.3.1(dc7352af320ee2132983d3dfbee89de0)':
     dependencies:
-      '@edrlab/thorium-locales': thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6
+      '@edrlab/thorium-locales': thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/34a2891445d535c120a5cebcacd82170b37899ea
       '@readium/css': 2.0.2
       '@readium/navigator': 2.4.0
       '@readium/navigator-html-injectables': 2.3.1
@@ -6154,7 +6165,7 @@ snapshots:
 
   '@readium/shared@2.2.0':
     dependencies:
-      '@edrlab/thorium-locales': thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6
+      '@edrlab/thorium-locales': thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/34a2891445d535c120a5cebcacd82170b37899ea
 
   '@reduxjs/toolkit@2.11.2(react-redux@9.2.0(@types/react@19.2.14)(react@19.2.4)(redux@5.0.1))(react@19.2.4)':
     dependencies:
@@ -7926,6 +7937,10 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lucide-react@0.546.0(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -8955,7 +8970,7 @@ snapshots:
 
   tapable@2.3.2: {}
 
-  thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/d5d2d4cc5252413da89b350f26c394d65f06a9c6: {}
+  thorium-locales@https://codeload.github.com/edrlab/thorium-locales/tar.gz/34a2891445d535c120a5cebcacd82170b37899ea: {}
 
   tiny-invariant@1.3.3: {}
 
