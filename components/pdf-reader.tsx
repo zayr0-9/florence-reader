@@ -145,13 +145,13 @@ export function PdfReader({
       const context = canvas.getContext("2d");
       if (!context) return;
 
-      const pixelRatio = window.devicePixelRatio || 1;
-      const viewport = page.getViewport({ scale: scale * pixelRatio });
+      const outputScale = window.devicePixelRatio || 1;
+      const viewport = baseViewport;
 
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-      canvas.style.width = `${targetPageWidth}px`;
-      canvas.style.height = `${baseViewport.height}px`;
+      canvas.width = Math.floor(viewport.width * outputScale);
+      canvas.height = Math.floor(viewport.height * outputScale);
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
 
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -162,6 +162,8 @@ export function PdfReader({
         canvas,
         canvasContext: context,
         viewport,
+        transform:
+          outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : undefined,
       });
       renderTaskRef.current = renderTask;
 

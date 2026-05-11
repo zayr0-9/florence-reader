@@ -94,9 +94,10 @@ export function EpubReader({
         containerRef.current.innerHTML = "";
       }
 
-      book = ePub(fileData.slice(0), {
+      book = ePub({
         replacements: "blobUrl",
       });
+      book.open(fileData.slice(0), "binary");
       bookRef.current = book;
 
       book.on("openFailed", (error) => {
@@ -212,11 +213,6 @@ export function EpubReader({
     if (lastNavigationNonceRef.current === navigationRequest.nonce) return;
 
     lastNavigationNonceRef.current = navigationRequest.nonce;
-    setStatus(
-      navigationRequest.direction === "next"
-        ? "Moving to next EPUB page…"
-        : "Moving to previous EPUB page…",
-    );
 
     const movePromise =
       navigationRequest.direction === "next"

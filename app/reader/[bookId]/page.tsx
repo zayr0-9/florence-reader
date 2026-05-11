@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { ReaderClient } from "@/components/reader-client"
-import { SiteShell } from "@/components/site-shell"
+
 import { featuredBooks } from "@/lib/mock-data"
 import { BookRecord } from "@/lib/types"
 
@@ -15,11 +15,7 @@ export default async function ReaderPage(props: PageProps<"/reader/[bookId]">) {
     notFound()
   }
 
-  return (
-    <SiteShell currentPath="/reader/demo">
-      <ReaderClient book={book} source={source} />
-    </SiteShell>
-  )
+  return <ReaderClient book={book} source={source} />
 }
 
 function buildLocalPlaceholderBook(bookId: string): BookRecord {

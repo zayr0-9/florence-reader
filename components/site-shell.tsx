@@ -19,21 +19,21 @@ export function SiteShell({
 }) {
   return (
     <div
-      className="flex min-h-dvh w-full flex-col overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.14),_transparent_40%),linear-gradient(180deg,#fafaf9_0%,#f4f4f5_100%)] text-foreground"
+      className="flex min-h-dvh w-full flex-col overflow-x-hidden text-foreground"
       style={{ "--site-header-height": "73px" } as React.CSSProperties}
     >
-      <header className="shrink-0 h-[var(--site-header-height)] border-b border-black/5 bg-white/70 backdrop-blur">
+      <header className="shrink-0 h-[var(--site-header-height)] border-b border-[var(--line)] bg-[linear-gradient(180deg,#f8f0e2_0%,#f1e5cf_100%)]">
         <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <Link href="/" className="flex min-w-0 items-center gap-3">
-            <div className="flex size-10 items-center justify-center border border-black/10 bg-emerald-400/20 text-emerald-700">
+            <div className="flex size-10 items-center justify-center rounded-sm border border-[var(--line-strong)] bg-[var(--paper)] text-[11px] font-semibold tracking-[0.2em] text-[var(--highlight)]">
               FL
             </div>
             <div className="min-w-0">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--ink-light)]">
                 Florence
               </p>
-              <h1 className="truncate text-sm font-semibold tracking-wide">
-                Reader-first ebook studio
+              <h1 className="truncate font-serif text-sm font-semibold tracking-wide text-[var(--ink)]">
+                Reader & Scriptorium
               </h1>
             </div>
           </Link>
@@ -46,10 +46,10 @@ export function SiteShell({
                   key={href}
                   href={href}
                   className={cn(
-                    "inline-flex items-center gap-2 border px-2 py-2 text-xs uppercase tracking-[0.24em] transition-colors sm:px-3",
+                    "inline-flex items-center gap-2 rounded-sm border px-2 py-2 text-[10px] uppercase tracking-[0.2em] transition-colors sm:px-3",
                     active
-                      ? "border-emerald-500 bg-emerald-500 text-white"
-                      : "border-black/10 bg-white hover:border-emerald-500/50 hover:bg-emerald-50",
+                      ? "border-[var(--highlight)] bg-[var(--highlight)] text-[#f8efe0]"
+                      : "border-[var(--line)] bg-[var(--paper)] text-[var(--ink)] hover:border-[var(--highlight-soft)] hover:bg-[#fbf4e6]",
                   )}
                 >
                   <Icon className="size-4" />
